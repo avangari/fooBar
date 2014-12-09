@@ -106,12 +106,11 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
 
           btree.locate(low,cursor);
 
-          do
+          while(key < high)
           {
             if(btree.readForward(cursor, key, rid) == 0)
               ridVector.push_back(rid);
           }
-          while(key < high);
       }
     }
   }

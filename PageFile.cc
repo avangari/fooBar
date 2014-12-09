@@ -136,10 +136,7 @@ RC PageFile::read(PageId pid, void* buffer) const
   RC rc;
 
   if (pid < 0 || pid >= epid)
-  {
-    printf("WRONG PID\n"); 
     return RC_INVALID_PID; 
-  }
   //
   // if the page is in cache, read it from there
   //
