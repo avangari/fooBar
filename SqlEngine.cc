@@ -105,7 +105,7 @@ RC SqlEngine::select(int attr, const string& table, const vector<SelCond>& cond)
             printf("IN LOOP 0!!\n");
 
           btree.locate(low,cursor);
-
+			 btree.printLeaves();
           while(key < high)
           {
             if(btree.readForward(cursor, key, rid) == 0)

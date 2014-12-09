@@ -11,10 +11,26 @@
 #include "SqlEngine.h"
 #include "BTreeNode.h"
 #include "BTreeIndex.h"
+#include "RecordFile.h"
+#include <vector>
+#include <iostream>
+using namespace std;
 
 int main()
 {
-    SqlEngine::run(stdin);
+	vector<int> keys;
+	RecordId rid;
+	for (int i =0; i < 30; i++) {
+		keys.push_back(i);
+	}
+	BTreeIndex bti;
+	bti.open("BIndex.idx", 'w');
+	for (int i=0; i<keys.size(); i++) {
+		bti.insert(keys[i], rid);
+	}
+	cout << "helloooo " << endl;
+	bti.printLeaves();
+    //SqlEngine::run(stdin);
     // BTreeIndex bIndex;
     // RecordId rid;
     // rid.pid = 1;

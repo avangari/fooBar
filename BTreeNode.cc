@@ -6,6 +6,7 @@ using namespace std;
 
 BTLeafNode::BTLeafNode()
 {
+	setNextNodePtr(-1);
 	bzero(buffer, PageFile::PAGE_SIZE);
 	insertSplit = false;
 	//std:cout << "done with constructor\n";
@@ -317,6 +318,7 @@ RC BTNonLeafNode::insert(int key, PageId pid)
 		NonLeafElement* tempTwo;
 		if(result == -1) // append to end of node
 		{
+	
 			temp = (NonLeafElement *) buffer;
 			int old = temp->pid;
 			temp = (NonLeafElement *) buffer + (getKeyCount()+1);
@@ -387,6 +389,7 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 			middle = ceil(((double)getKeyCount()+1)/(double)2);
 		else
 			middle = (getKeyCount()+1)/2+1;
+		cout << "MIDDLE===" << middle << endl;
 		NonLeafElement* temp;
 		temp = (NonLeafElement*) buffer+middle;
 		midKey = temp->key;
@@ -395,6 +398,8 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		int newPidForSibling = temp->pid;
 		temp->pid = oldPid;
 		sibling.changeEndRightPtr(newPidForSibling);
+		cout << "OLD LAST PTR=" << oldPid << endl;
+		cout << "SIBLING LAST PTR =" << newPidForSibling << endl;
 		for(int i = middle+1; i <= getKeyCount()+1; i++)
 		{
 			temp = (NonLeafElement *) buffer+i;
@@ -402,6 +407,7 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 			PageId tempPid = temp->pid;
 			sibling.insert(tempKey, tempPid);
 			siblingNumOfKeys++;
+			bzero(temp, sizeof(NonLeafElement));
 			// if(i == middle)
 			// 	midKey = tempKey;
 		}
@@ -415,6 +421,9 @@ RC BTNonLeafNode::insertAndSplit(int key, PageId pid, BTNonLeafNode& sibling, in
 		//update suibling count
 		sibling.updateCount(siblingNumOfKeys);
 		insertSplit = false;
+
+		this->printBuffer();
+		sibling.printBuffer();
 		return 0;
 	}
 	else
@@ -525,10 +534,12 @@ int BTNonLeafNode::printBuffer()
 	for(int i = 1; i <= getKeyCount(); i++)
 	{
 		 NonLeafElement* temp = (NonLeafElement *) buffer+i;
-		 std::cout << temp->key << endl;
-		 std::cout << temp->pid << endl;
-		 std::cout << temp->sid << endl;
-		 std::cout << "\n";
+		 std::cout << temp->key << "--" << temp->pid << ", ";;
+		 //std::cout << temp->pid << endl;
+		 //std::cout << temp->sid << endl;
 	}
+	NonLeafElement* temp = (NonLeafElement * ) buffer;
+	cout << temp->pid;
+	std::cout << "\n";
 	return 0;
 }

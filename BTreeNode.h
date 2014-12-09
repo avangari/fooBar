@@ -31,7 +31,8 @@ class BTLeafNode {
     // 1024 bytes / 12 bytes = 85 bytes
     // 85 - 1 = 84 max keys, save one for getting current key size and 
     // pointing to next node. 
-    static const int MAX_KEYS = (PageFile::PAGE_SIZE/sizeof(LeafElement))-2;
+    //static const int MAX_KEYS = (PageFile::PAGE_SIZE/sizeof(LeafElement))-2;
+	static const int MAX_KEYS = 5;
     bool insertSplit;
 
     /**
@@ -149,7 +150,8 @@ class BTNonLeafNode {
     // 1024 bytes / 12 bytes = 85 bytes
     // 85 - 1 = 84 max keys, save one for getting current key size and 
     // pointing to next node. 
-    static const int MAX_KEYS = (PageFile::PAGE_SIZE/sizeof(NonLeafElement))-2;
+    //static const int MAX_KEYS = (PageFile::PAGE_SIZE/sizeof(NonLeafElement))-2;
+	static const int MAX_KEYS = 5;
     bool insertSplit;
 
     /**

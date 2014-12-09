@@ -172,11 +172,8 @@ RC BTreeIndex::insertRecursive(int& key, const RecordId& rid, int currentHeight,
 			newNode.printBuffer();
 
 			// write both nodes to memory
-			if(newNode.write(newPid, pf) < 0)
-				return -1;
-			
-			if(ln.write(currentPid, pf) < 0)
-				return -1;
+			newNode.write(newPid, pf);
+			ln.write(currentPid, pf);
 
 			return 1;
 		}
@@ -223,7 +220,7 @@ RC BTreeIndex::insertRecursive(int& key, const RecordId& rid, int currentHeight,
 				if((newNode.write(newPid,pf)) < 0)
 					return -1;
 
-				if((newNode.write(currentPid,pf)) < 0)
+				if((nl.write(currentPid,pf)) < 0)
 					return -1;
 
 				return 1;
@@ -327,10 +324,11 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 
 	cursor.eid++;
 
-	if(cursor.eid > leafNode.getKeyCount())
+	if(cursor.eid >= leafNode.getKeyCount())
 	{
 		cursor.eid = 1;
 		cursor.pid = leafNode.getNextNodePtr();
+		
 	}
     return 0;
 }
@@ -341,19 +339,18 @@ void BTreeIndex::printLeaves( ) {
 	BTLeafNode leaf;
 	int key;
 	PageId pid;
-	int min_int = (1 << 31);
+	int min_int = 0;
 	locate(min_int, cursor);
 	pid = cursor.pid;
 	
 	cout << "PID= " << pid << " ";
 	leaf.read(pid, pf);
 	leaf.printBuffer();
-	while(readForward(cursor,key,rid) >=0) {
-		if (cursor.pid != pid) {
-			cout << "PID= " << pid << " ";
-			leaf.read(pid, pf);
-			leaf.printBuffer();
-			pid = cursor.pid;
-		}
+	//while(readForward(cursor,key,rid) >=0) {
+		//if (cursor.pid != pid) {
+	while(pid = leaf.getNextNodePtr() > 0 ) {
+		cout << "PID= " << pid << " ";
+		leaf.read(pid, pf);
+		leaf.printBuffer();
 	}
 }
