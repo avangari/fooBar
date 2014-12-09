@@ -118,7 +118,7 @@ RC BTreeIndex::insert(int key, const RecordId& rid)
 	else if (treeHeight == 0) // index empty, inserting first node
 	{
 		printf("In else, new index\n");
-		rootPid = pf.endPid(); // rootPid is 0
+		rootPid = pf.endPid()+1; // rootPid is 0
 		BTLeafNode ln = BTLeafNode();
 		if(ln.insert(key, rid) < 0)
 			return -1;
@@ -271,7 +271,7 @@ RC BTreeIndex::locate(int searchKey, IndexCursor& cursor)
 	if(treeHeight > 1) // multilevel tree
 	{
 		// iterate each level of the tree
-		for(int i = 0; i < treeHeight; i++)
+		for(int i = 0; i < treeHeight-1; i++)
 		{
 			if(nonLeafNode.read(pid, pf) < 0)
 			{
