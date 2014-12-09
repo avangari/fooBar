@@ -10,6 +10,8 @@
 #include "BTreeIndex.h"
 #include "BTreeNode.h"
 
+#include <iostream>
+
 using namespace std;
 
 /*
@@ -331,4 +333,27 @@ RC BTreeIndex::readForward(IndexCursor& cursor, int& key, RecordId& rid)
 		cursor.pid = leafNode.getNextNodePtr();
 	}
     return 0;
+}
+
+void BTreeIndex::printLeaves( ) {
+	IndexCursor cursor;
+	RecordId rid;
+	BTLeafNode leaf;
+	int key;
+	PageId pid;
+	int min_int = (1 << 31);
+	locate(min_int, cursor);
+	pid = cursor.pid;
+	
+	cout << "PID= " << pid << " ";
+	leaf.read(pid, pf);
+	leaf.printBuffer();
+	while(readForward(cursor,key,rid) >=0) {
+		if (cursor.pid != pid) {
+			cout << "PID= " << pid << " ";
+			leaf.read(pid, pf);
+			leaf.printBuffer();
+			pid = cursor.pid;
+		}
+	}
 }

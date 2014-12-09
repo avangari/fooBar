@@ -33,6 +33,7 @@ typedef struct {
  */
 class BTreeIndex {
  public:
+  void printLeaves();
   BTreeIndex();
 
   /**

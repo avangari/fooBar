@@ -244,11 +244,12 @@ int BTLeafNode::printBuffer()
 	for(int i = 1; i <= getKeyCount(); i++)
 	{
 		 LeafElement* temp = (LeafElement *) buffer+i;
-		 std::cout << temp->key << endl;
-		 std::cout << temp->rid.pid << endl;
-		 std::cout << temp->rid.sid << endl;
-		 std::cout << "\n";
+		 std::cout << temp->key << ",";
+		 //std::cout << temp->rid.pid << endl;
+		 //std::cout << temp->rid.sid << endl;
+		 //std::cout << "\n";
 	}
+	cout << endl;
 	return 0;
 }
 
